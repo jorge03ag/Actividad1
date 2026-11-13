@@ -1,0 +1,19 @@
+name: terraform                 # nombre del pipeline
+on:
+  pull_request:                 # se dispara al abrir o actualizar un PR
+    paths: ["**.tf", "**.tfvars"]
+permissions:
+  contents: read
+  id-token: write               # para autenticarse sin llaves (WIF)
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4             # baja el codigo del PR
+      - uses: hashicorp/setup-terraform@v3    # instala terraform
+      - run: terraform fmt -check -recursive  # 1. revisa el formato
+      - run: terraform init -backend=false    # prepara (sin backend real)
+      - run: terraform validate               # 2. sintaxis valida
+      #- run: terraform plan                    # 3. muestra que va a cambiar
+      # 4. policy: valida reglas de seguridad antes de permitir el merge
+      # - run: conftest test plan.json -p policy/
