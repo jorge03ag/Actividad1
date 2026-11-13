@@ -1,2 +1,2 @@
 variable "force-destroy" { type = string }
-variable "clase" { type = string, default = "STANDARD"  }
+variable "clase" { type = string, default = "NEARLINE"  }
